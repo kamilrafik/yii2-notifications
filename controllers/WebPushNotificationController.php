@@ -60,6 +60,7 @@ class WebPushNotificationController extends Controller
 
         if($subscriber) {
             $subscriber->subscription = $subscription;
+            $subscriber->user_id = $decoded->hash;
             $subscriber->save();
             $message = 'user subscription updated';
         }
