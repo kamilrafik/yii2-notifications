@@ -5,11 +5,11 @@ namespace webzop\notifications\widgets;
 use Exception;
 use webzop\notifications\channels\WebChannel;
 use webzop\notifications\WebNotificationsAsset;
-use yii\helpers\ArrayHelper;
 use Yii;
+use yii\helpers\ArrayHelper;
 use yii\helpers\Html;
-use yii\helpers\Url;
 use yii\helpers\Json;
+use yii\helpers\Url;
 use yii\web\View;
 
 
@@ -31,6 +31,11 @@ class WebNotifications extends \yii\base\Widget
      */
     public $template = '';
 
+
+    public $subscriptionHash;
+
+    public $labelSubscribe;
+    public $labelUnsubscribe;
 
     /**
      *
@@ -89,8 +94,8 @@ class WebNotifications extends \yii\base\Widget
             'serviceWorkerUrl' => Url::to(['/notifications/web-push-notification/service-worker']),
             'subscribeUrl' => Url::to(['/notifications/web-push-notification/subscribe']),
             'unsubscribeUrl' => Url::to(['/notifications/web-push-notification/unsubscribe']),
-            'subscribeLabel' => 'Subscribe',
-            'unsubscribeLabel' => 'Unsubscribe',
+            'subscribeLabel' => $this->labelSubscribe ?? 'Subscribe',
+            'unsubscribeLabel' => $this->labelUnsubscribe ?? 'Unsubscribe',
         );
     }
 
@@ -104,6 +109,7 @@ class WebNotifications extends \yii\base\Widget
         $module = Yii::$app->getModule('notifications');
 
         if(ArrayHelper::getValue($module->channels['web'], 'enable')) {
+            echo Html::hiddenInput('web-notifications-subscription-hash', $this->subscriptionHash);
             echo $this->renderSubscribeButton();
             $this->registerAssets();
         }
@@ -115,7 +121,6 @@ class WebNotifications extends \yii\base\Widget
      */
     protected function renderSubscribeButton()
     {
-
         if($this->template === false) {
             return '';
         }
@@ -124,8 +129,8 @@ class WebNotifications extends \yii\base\Widget
         }
 
         $html = Html::beginTag('p');
-        $html .= Html::beginTag('button', ['id' => 'js-web-push-subscribe-button', 'disabled' => 'disabled']);
-        $html .= "Subscribe";
+        $html .= Html::beginTag('button', ['id' => 'js-web-push-subscribe-button', 'disabled' => 'disabled', 'class' => 'btn btn-info']);
+        $html .= $this->labelSubscribe ?? "Subscribe";
         $html .= Html::endTag('button');
         $html .= Html::endTag('p');
 
