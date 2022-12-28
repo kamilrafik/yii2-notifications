@@ -109,7 +109,7 @@ class WebNotifications extends \yii\base\Widget
         $module = Yii::$app->getModule('notifications');
 
         if(ArrayHelper::getValue($module->channels['web'], 'enable')) {
-            echo Html::hiddenInput('web-notifications-subscription-hash', $this->subscriptionHash);
+            echo Html::hiddenInput('web-notifications-subscription-hash', $this->subscriptionHash, ['id' => 'web-notifications-subscription-hash']);
             echo $this->renderSubscribeButton();
             $this->registerAssets();
         }
