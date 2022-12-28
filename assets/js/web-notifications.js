@@ -116,6 +116,10 @@ var WebNotifications = (function(opts) {
 
             // enable button
             subscribeButton.disabled = false;
+
+            if (!isSubscribed) {
+                subscribe();
+            }
         }
         else {
             if (!isSubscribed) {
