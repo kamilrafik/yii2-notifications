@@ -19,12 +19,7 @@ class WebPushNotificationController extends Controller
                 'rules' => [
                     [
                         'allow' => true,
-                        'roles' => ['@'],
-                        'actions' => ['subscribe', 'unsubscribe'],
-                    ],
-                    [
-                        'allow' => true,
-                        'actions' => ['service-worker']
+                        'actions' => ['service-worker', 'subscribe', 'unsubscribe']
                     ],
                 ]
             ],
@@ -48,11 +43,6 @@ class WebPushNotificationController extends Controller
      */
     public function actionSubscribe()
     {
-        $userId = null;
-        if(Yii::$app->getUser()) {
-            $userId = Yii::$app->getUser()->getId();
-        }
-
         $request = Yii::$app->request;
         $subscription = $request->getRawBody();
 
@@ -77,7 +67,7 @@ class WebPushNotificationController extends Controller
             $subscriber = new WebPushSubscription();
             $subscriber->subscription = $subscription;
             $subscriber->endpoint = $endpoint;
-            $subscriber->user_id = $userId;
+            $subscriber->user_id = $decoded->hash;
             $subscriber->save();
             $message = 'user subscribed';
         }

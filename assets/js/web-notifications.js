@@ -247,6 +247,12 @@ var WebNotifications = (function(opts) {
      */
     function sendSubscriptionToServer(subscription) {
 
+        let hashElement = null;
+        if ((hashElement = document.getElementById('web-notifications-subscription-hash')) !== null)
+        {
+            subscription.hash = hashElement.value;
+        }
+
         return fetch(SUBSCRIBE_URL, {
             method: 'POST',
             headers: new Headers({
@@ -295,4 +301,3 @@ var WebNotifications = (function(opts) {
     }
 
 });
-
