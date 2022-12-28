@@ -247,10 +247,14 @@ var WebNotifications = (function(opts) {
      */
     function sendSubscriptionToServer(subscription) {
 
+        let body = JSON.stringify(subscription);
+
         let hashElement = null;
         if ((hashElement = document.getElementById('web-notifications-subscription-hash')) !== null)
         {
-            subscription.hash = hashElement.value;
+            body = JSON.parse(body);
+            body['hash'] = hashElement.value;
+            body = JSON.stringify(body);
         }
 
         return fetch(SUBSCRIBE_URL, {
@@ -258,7 +262,7 @@ var WebNotifications = (function(opts) {
             headers: new Headers({
                 "Content-Type": "application/json"
             }),
-            body: JSON.stringify(subscription),
+            body: body,
         })
             .then(function (response) {
                 if (!response.ok) {
